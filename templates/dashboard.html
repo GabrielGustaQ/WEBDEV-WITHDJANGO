@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="h3">Dashboard</h1>
+
+<p>Bem-vindo ao Sistema de Pré-Matrícula Acadêmica.</p>
+
+<div class="list-group">
+    <a href="{% url 'matriculas_list' %}" class="list-group-item list-group-item-action">
+        Gerenciar Matrículas
+    </a>
+    <a href="{% url 'matriculas_create' %}" class="list-group-item list-group-item-action">
+        Nova Pré-Matrícula
+    </a>
+    <a href="{% url 'minhas_matriculas' %}" class="list-group-item list-group-item-action">
+        Minhas Matrículas
+    </a>
+</div>
+{% endblock %}
