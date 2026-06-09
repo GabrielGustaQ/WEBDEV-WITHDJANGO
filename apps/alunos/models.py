@@ -19,6 +19,7 @@ class Aluno(models.Model):
     atualizado_em = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = "aluno"
         ordering = ["nome"]
 
     def __str__(self):

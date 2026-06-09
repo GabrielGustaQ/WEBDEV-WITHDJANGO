@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import F
 
 from apps.alunos.models import Aluno
 from apps.disciplinas.models import Disciplina
@@ -13,7 +14,8 @@ class MatriculaForm(forms.Form):
     disciplina = forms.ModelChoiceField(
         queryset=Disciplina.objects.filter(
             ativa=True,
-            vagas_disponiveis__gt=0
+            vagas_total__gt=F('vagas_ocupadas')
         ),
         label="Disciplina"
     )
+    

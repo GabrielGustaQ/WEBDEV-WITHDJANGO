@@ -4,7 +4,19 @@ from django.db.models import Q
 from apps.alunos.models import Aluno
 from apps.disciplinas.models import Disciplina
 
+class PeriodoLetivo(models.Model):
+    descricao = models.CharField(max_length=50, unique=True)  # ex: "2026.1"
+    data_inicio = models.DateField()
+    data_fim = models.DateField()
+    ativo = models.BooleanField(default=False)
 
+    class Meta:
+        db_table = "periodo_letivo"
+
+    def __str__(self):
+        return self.descricao
+    
+    
 class Matricula(models.Model):
     STATUS_CONFIRMADA = "confirmada"
     STATUS_PENDENTE = "pendente"
@@ -26,7 +38,11 @@ class Matricula(models.Model):
         on_delete=models.PROTECT,
         related_name="matriculas"
     )
-    periodo_letivo = models.CharField(max_length=20)
+    periodo_letivo = models.ForeignKey(
+        PeriodoLetivo,
+        on_delete=models.PROTECT,
+        related_name="matriculas"
+    )
 
     status = models.CharField(
         max_length=20,
@@ -38,6 +54,7 @@ class Matricula(models.Model):
     cancelada_em = models.DateTimeField(null=True, blank=True)
 
     class Meta:
+        db_table = "matricula"
         ordering = ["-criada_em"]
         constraints = [
             models.UniqueConstraint(
@@ -48,4 +65,4 @@ class Matricula(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.aluno} - {self.disciplina} - {self.status}"
+        return f"{self.aluno.nome} - {self.disciplina.codigo} ({self.status})"

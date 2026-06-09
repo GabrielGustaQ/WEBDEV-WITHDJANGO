@@ -1,10 +1,10 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User, Group
+from datetime import date
 
 from apps.alunos.models import Aluno
 from apps.disciplinas.models import Disciplina
-from apps.matriculas.services import realizar_matricula
-
+from apps.matriculas.models import PeriodoLetivo, Matricula
 
 class Command(BaseCommand):
     help = "Popula o banco com dados iniciais para testes."
@@ -27,6 +27,15 @@ class Command(BaseCommand):
             admin.save()
 
         admin.groups.add(secretaria_group)
+
+        periodo, _ = PeriodoLetivo.objects.get_or_create(
+            descricao="2026.1",
+            defaults={
+                "data_inicio": date(2026, 3, 1),
+                "data_fim": date(2026, 7, 15),
+                "ativo": True
+            }
+        )
 
         alunos_data = [
             {
@@ -86,27 +95,24 @@ class Command(BaseCommand):
                 "nome": "Desenvolvimento Web",
                 "codigo": "COMP001",
                 "carga_horaria": 60,
-                "periodo_letivo": "2026.1",
                 "vagas_total": 30,
-                "vagas_disponiveis": 30,
+                "vagas_ocupadas": 0,
                 "ativa": True,
             },
             {
                 "nome": "Banco de Dados",
                 "codigo": "COMP002",
                 "carga_horaria": 60,
-                "periodo_letivo": "2026.1",
                 "vagas_total": 25,
-                "vagas_disponiveis": 25,
+                "vagas_ocupadas": 0,
                 "ativa": True,
             },
             {
                 "nome": "Engenharia de Software",
                 "codigo": "COMP003",
                 "carga_horaria": 60,
-                "periodo_letivo": "2026.1",
                 "vagas_total": 20,
-                "vagas_disponiveis": 20,
+                "vagas_ocupadas": 0,
                 "ativa": True,
             },
         ]
@@ -120,22 +126,20 @@ class Command(BaseCommand):
             )
             disciplinas.append(disciplina)
 
-        try:
-            realizar_matricula(alunos[0], disciplinas[0])
-        except ValueError:
-            pass
-
-        try:
-            realizar_matricula(alunos[1], disciplinas[1])
-        except ValueError:
-            pass
+        if alunos and disciplinas:
+            Matricula.objects.get_or_create(
+                aluno=alunos[0],
+                disciplina=disciplinas[0],
+                periodo_letivo=periodo,
+                defaults={"status": "confirmada"}
+            )
+            Matricula.objects.get_or_create(
+                aluno=alunos[1],
+                disciplina=disciplinas[1],
+                periodo_letivo=periodo,
+                defaults={"status": "confirmada"}
+            )
 
         self.stdout.write(self.style.SUCCESS("Seed executado com sucesso."))
-
-        self.stdout.write("Usuário secretaria:")
-        self.stdout.write("login: admin")
-        self.stdout.write("senha: admin123")
-
-        self.stdout.write("Usuário aluno:")
-        self.stdout.write("login: 2024001")
-        self.stdout.write("senha: aluno123")
+        self.stdout.write("Secretaria -> login: admin | senha: admin123")
+        self.stdout.write("Aluno -> login: 2024001 | senha: aluno123")
