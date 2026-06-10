@@ -19,19 +19,21 @@ class Matricula(models.Model):
     aluno = models.ForeignKey(
         Aluno,
         on_delete=models.PROTECT,
-        related_name="matriculas"
+        related_name="matriculas",
     )
+
     disciplina = models.ForeignKey(
         Disciplina,
         on_delete=models.PROTECT,
-        related_name="matriculas"
+        related_name="matriculas",
     )
+
     periodo_letivo = models.CharField(max_length=20)
 
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
-        default=STATUS_CONFIRMADA
+        default=STATUS_CONFIRMADA,
     )
 
     criada_em = models.DateTimeField(auto_now_add=True)
@@ -39,11 +41,13 @@ class Matricula(models.Model):
 
     class Meta:
         ordering = ["-criada_em"]
+        verbose_name = "Matrícula"
+        verbose_name_plural = "Matrículas"
         constraints = [
             models.UniqueConstraint(
                 fields=["aluno", "disciplina", "periodo_letivo"],
                 condition=~Q(status="cancelada"),
-                name="uniq_matricula_ativa_por_periodo"
+                name="uniq_matricula_ativa_por_periodo",
             )
         ]
 

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico do aluno | Pré-Matrícula{% endblock %}
+
+{% block page_title %}Histórico do aluno{% endblock %}
+{% block page_subtitle %}Consulta das pré-matrículas realizadas por aluno{% endblock %}
+
+{% block content %}
+<div class="page-actions">
+    <form method="get" class="search-form">
+        <input
+            type="text"
+            name="aluno"
+            class="form-control"
+            placeholder="Nome ou matrícula do aluno"
+            value="{{ aluno_busca|default:'' }}"
+        >
+
+        <button class="btn btn-outline-primary" type="submit">
+            Buscar
+        </button>
+    </form>
+
+    <button onclick="window.print()" class="btn btn-outline-secondary">
+        <i class="bi bi-printer"></i>
+        Imprimir
+    </button>
+</div>
+
+{% if aluno %}
+    <div class="student-summary">
+        <div>
+            <small>Aluno</small>
+            <strong>{{ aluno.nome }}</strong>
+        </div>
+
+        <div>
+            <small>Matrícula</small>
+            <strong>{{ aluno.matricula }}</strong>
+        </div>
+
+        <div>
+            <small>Curso</small>
+            <strong>{{ aluno.curso }}</strong>
+        </div>
+    </div>
+{% endif %}
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Disciplina</th>
+                <th>Código</th>
+                <th>Período</th>
+                <th>Data</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for matricula in matriculas %}
+                <tr>
+                    <td><strong>{{ matricula.disciplina.nome }}</strong></td>
+                    <td>{{ matricula.disciplina.codigo }}</td>
+                    <td>{{ matricula.periodo_letivo }}</td>
+                    <td>{{ matricula.criada_em|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        {% if matricula.status == "confirmada" %}
+                            <span class="badge text-bg-success">Confirmada</span>
+                        {% elif matricula.status == "pendente" %}
+                            <span class="badge text-bg-warning">Pendente</span>
+                        {% elif matricula.status == "cancelada" %}
+                            <span class="badge text-bg-danger">Cancelada</span>
+                        {% else %}
+                            <span class="badge text-bg-secondary">{{ matricula.status }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="empty-state">
+                        Nenhuma matrícula encontrada para este aluno.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

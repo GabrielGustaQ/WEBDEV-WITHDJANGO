@@ -1,21 +1,33 @@
 {% extends "base.html" %}
 
+{% block title %}Excluir aluno | Pré-Matrícula{% endblock %}
+
+{% block page_title %}Excluir aluno{% endblock %}
+{% block page_subtitle %}Confirmação de exclusão lógica do cadastro{% endblock %}
+
 {% block content %}
-<h1 class="h3 mb-3">Excluir Aluno</h1>
+<div class="confirm-box">
+    <div class="confirm-icon danger">
+        <i class="bi bi-exclamation-triangle"></i>
+    </div>
 
-<div class="alert alert-warning">
-    Tem certeza que deseja excluir o aluno <strong>{{ aluno.nome }}</strong>?
+    <h2>Confirmar exclusão?</h2>
+
+    <p>
+        O aluno <strong>{{ aluno.nome }}</strong>, matrícula
+        <strong>{{ aluno.matricula }}</strong>, será marcado como inativo.
+    </p>
+
+    <form method="post" class="confirm-actions">
+        {% csrf_token %}
+
+        <a href="{% url 'alunos_list' %}" class="btn btn-outline-secondary">
+            Cancelar
+        </a>
+
+        <button type="submit" class="btn btn-danger">
+            Confirmar exclusão
+        </button>
+    </form>
 </div>
-
-<form method="post">
-    {% csrf_token %}
-
-    <button type="submit" class="btn btn-danger">
-        Confirmar exclusão
-    </button>
-
-    <a href="{% url 'alunos_list' %}" class="btn btn-secondary">
-        Cancelar
-    </a>
-</form>
 {% endblock %}

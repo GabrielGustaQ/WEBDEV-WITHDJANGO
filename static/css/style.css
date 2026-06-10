@@ -1,0 +1,409 @@
+:root {
+    --bg: #f4f6f9;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text: #111827;
+    --muted: #6b7280;
+    --primary: #1d4ed8;
+    --primary-dark: #1e40af;
+    --sidebar: #111827;
+    --sidebar-light: #1f2937;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.app-layout {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+}
+
+.sidebar {
+    background: var(--sidebar);
+    color: white;
+    padding: 24px 18px;
+}
+
+.sidebar-header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.brand-icon,
+.login-icon,
+.dashboard-icon,
+.confirm-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: var(--primary);
+    color: white;
+    font-size: 1.3rem;
+}
+
+.sidebar-header strong {
+    display: block;
+    line-height: 1.1;
+}
+
+.sidebar-header small {
+    color: #9ca3af;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sidebar-nav a {
+    color: #d1d5db;
+    text-decoration: none;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 11px 12px;
+    border-radius: 10px;
+    transition: 0.15s;
+}
+
+.sidebar-nav a:hover {
+    background: var(--sidebar-light);
+    color: white;
+}
+
+.sidebar-section {
+    color: #9ca3af;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 18px 12px 6px;
+}
+
+.main-content {
+    padding: 28px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.topbar h1 {
+    font-size: 1.7rem;
+    margin: 0;
+}
+
+.topbar p {
+    margin: 4px 0 0;
+    color: var(--muted);
+}
+
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.user-info {
+    text-align: right;
+}
+
+.user-info strong,
+.user-info small {
+    display: block;
+}
+
+.user-info small {
+    color: var(--muted);
+}
+
+.content-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+.messages {
+    margin-bottom: 18px;
+}
+
+.page-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+}
+
+.search-form input {
+    max-width: 360px;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    color: var(--muted);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border);
+}
+
+.table td {
+    border-color: var(--border);
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--muted);
+    padding: 32px !important;
+}
+
+.form-panel {
+    max-width: 920px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.form-error {
+    color: #dc2626;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.form-error ul {
+    margin: 4px 0 0;
+    padding-left: 18px;
+}
+
+.info-box {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e3a8a;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.dashboard-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 22px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    text-decoration: none;
+    color: var(--text);
+    transition: 0.15s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    border-color: #bfdbfe;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
+}
+
+.dashboard-card h2 {
+    font-size: 1.1rem;
+    margin: 0 0 4px;
+}
+
+.dashboard-card p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.login-page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background:
+        radial-gradient(circle at top left, #dbeafe, transparent 30%),
+        var(--bg);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    padding: 32px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.login-icon {
+    margin: 0 auto 16px;
+}
+
+.login-header h1 {
+    font-size: 1.35rem;
+    margin: 0;
+}
+
+.login-header p {
+    color: var(--muted);
+    margin: 6px 0 0;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 18px;
+    color: var(--muted);
+}
+
+.confirm-box {
+    max-width: 600px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.confirm-icon {
+    margin: 0 auto 16px;
+}
+
+.confirm-icon.danger {
+    background: #dc2626;
+}
+
+.confirm-box h2 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.confirm-box p {
+    color: var(--muted);
+}
+
+.confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.student-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.student-summary div {
+    padding: 16px;
+    border-right: 1px solid var(--border);
+}
+
+.student-summary div:last-child {
+    border-right: none;
+}
+
+.student-summary small {
+    display: block;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+
+@media print {
+    .sidebar,
+    .topbar,
+    .page-actions,
+    .btn {
+        display: none !important;
+    }
+
+    .app-layout {
+        display: block;
+    }
+
+    .main-content {
+        padding: 0;
+    }
+
+    .content-card {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+}
+
+@media (max-width: 900px) {
+    .app-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: static;
+    }
+
+    .topbar,
+    .page-actions,
+    .user-area,
+    .search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .user-info {
+        text-align: left;
+    }
+
+    .dashboard-grid,
+    .student-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .search-form input {
+        max-width: none;
+    }
+}

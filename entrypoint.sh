@@ -10,6 +10,9 @@ done
 
 echo "Banco disponível."
 
+echo "Gerando migrations..."
+python manage.py makemigrations
+
 echo "Aplicando migrations..."
 python manage.py migrate
 
@@ -19,4 +22,4 @@ if [ "$SEED_DB" = "True" ]; then
 fi
 
 echo "Iniciando servidor Django..."
-python manage.py runserver 0.0.0.0:8000
+exec python manage.py runserver 0.0.0.0:8000

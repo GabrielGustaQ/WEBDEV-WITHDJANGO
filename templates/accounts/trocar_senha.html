@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Trocar senha | Pré-Matrícula{% endblock %}
+
+{% block page_title %}Trocar senha{% endblock %}
+{% block page_subtitle %}Defina uma nova senha para continuar usando o sistema{% endblock %}
+
+{% block content %}
+<form method="post" class="form-panel">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">{{ form.nova_senha.label }}</label>
+            {{ form.nova_senha }}
+            <div class="form-error">{{ form.nova_senha.errors }}</div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">{{ form.confirmar_senha.label }}</label>
+            {{ form.confirmar_senha }}
+            <div class="form-error">{{ form.confirmar_senha.errors }}</div>
+        </div>
+    </div>
+
+    <div class="info-box mt-4">
+        <i class="bi bi-info-circle"></i>
+        Por segurança, a senha temporária precisa ser substituída no primeiro acesso.
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+            Alterar senha
+        </button>
+    </div>
+</form>
+{% endblock %}

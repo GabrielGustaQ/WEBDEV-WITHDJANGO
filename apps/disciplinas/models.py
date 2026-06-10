@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -17,6 +18,8 @@ class Disciplina(models.Model):
 
     class Meta:
         ordering = ["nome"]
+        verbose_name = "Disciplina"
+        verbose_name_plural = "Disciplinas"
 
     def __str__(self):
         return f"{self.codigo} - {self.nome}"
@@ -24,3 +27,9 @@ class Disciplina(models.Model):
     @property
     def vagas_ocupadas(self):
         return self.vagas_total - self.vagas_disponiveis
+
+    def clean(self):
+        if self.vagas_disponiveis > self.vagas_total:
+            raise ValidationError(
+                "As vagas disponíveis não podem ser maiores que o total de vagas."
+            )

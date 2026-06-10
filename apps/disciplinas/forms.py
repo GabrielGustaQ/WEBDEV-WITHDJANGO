@@ -1,4 +1,5 @@
 from django import forms
+
 from .models import Disciplina
 
 
@@ -15,8 +16,49 @@ class DisciplinaForm(forms.ModelForm):
             "ativa",
         ]
 
+        widgets = {
+            "nome": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Nome da disciplina"
+            }),
+            "codigo": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Ex: COMP001"
+            }),
+            "carga_horaria": forms.NumberInput(attrs={
+                "class": "form-control",
+                "min": 1
+            }),
+            "periodo_letivo": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Ex: 2026.1"
+            }),
+            "vagas_total": forms.NumberInput(attrs={
+                "class": "form-control",
+                "min": 0
+            }),
+            "vagas_disponiveis": forms.NumberInput(attrs={
+                "class": "form-control",
+                "min": 0
+            }),
+            "ativa": forms.CheckboxInput(attrs={
+                "class": "form-check-input"
+            }),
+        }
+
+        labels = {
+            "nome": "Nome",
+            "codigo": "Código",
+            "carga_horaria": "Carga horária",
+            "periodo_letivo": "Período letivo",
+            "vagas_total": "Total de vagas",
+            "vagas_disponiveis": "Vagas disponíveis",
+            "ativa": "Disciplina ativa",
+        }
+
     def clean(self):
         cleaned_data = super().clean()
+
         vagas_total = cleaned_data.get("vagas_total")
         vagas_disponiveis = cleaned_data.get("vagas_disponiveis")
 

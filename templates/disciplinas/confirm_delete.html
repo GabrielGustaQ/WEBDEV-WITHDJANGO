@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Excluir disciplina | Pré-Matrícula{% endblock %}
+
+{% block page_title %}Excluir disciplina{% endblock %}
+{% block page_subtitle %}Confirmação de exclusão lógica da disciplina{% endblock %}
+
+{% block content %}
+<div class="confirm-box">
+    <div class="confirm-icon danger">
+        <i class="bi bi-exclamation-triangle"></i>
+    </div>
+
+    <h2>Confirmar exclusão?</h2>
+
+    <p>
+        A disciplina
+        <strong>{{ disciplina.codigo }} - {{ disciplina.nome }}</strong>
+        será excluída se não possuir matrículas. Caso possua vínculos,
+        será marcada como inativa.
+    </p>
+
+    <form method="post" class="confirm-actions">
+        {% csrf_token %}
+
+        <a href="{% url 'disciplinas_list' %}" class="btn btn-outline-secondary">
+            Cancelar
+        </a>
+
+        <button type="submit" class="btn btn-danger">
+            Confirmar exclusão
+        </button>
+    </form>
+</div>
+{% endblock %}

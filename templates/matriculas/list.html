@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Matrículas | Pré-Matrícula{% endblock %}
+
+{% block page_title %}Matrículas{% endblock %}
+{% block page_subtitle %}Consulta das pré-matrículas realizadas{% endblock %}
+
+{% block content %}
+<div class="page-actions">
+    <div></div>
+
+    <a href="{% url 'matriculas_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i>
+        Nova matrícula
+    </a>
+</div>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Aluno</th>
+                <th>Disciplina</th>
+                <th>Período</th>
+                <th>Data</th>
+                <th>Status</th>
+                <th class="text-end">Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for matricula in matriculas %}
+                <tr>
+                    <td>
+                        <strong>{{ matricula.aluno.nome }}</strong>
+                        <br>
+                        <small class="text-muted">{{ matricula.aluno.matricula }}</small>
+                    </td>
+
+                    <td>
+                        {{ matricula.disciplina.nome }}
+                        <br>
+                        <small class="text-muted">{{ matricula.disciplina.codigo }}</small>
+                    </td>
+
+                    <td>{{ matricula.periodo_letivo }}</td>
+
+                    <td>{{ matricula.criada_em|date:"d/m/Y H:i" }}</td>
+
+                    <td>
+                        {% if matricula.status == "confirmada" %}
+                            <span class="badge text-bg-success">Confirmada</span>
+                        {% elif matricula.status == "pendente" %}
+                            <span class="badge text-bg-warning">Pendente</span>
+                        {% elif matricula.status == "cancelada" %}
+                            <span class="badge text-bg-danger">Cancelada</span>
+                        {% else %}
+                            <span class="badge text-bg-secondary">{{ matricula.status }}</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="text-end">
+                        {% if matricula.status != "cancelada" %}
+                            <a href="{% url 'matriculas_cancelar' matricula.id %}" class="btn btn-sm btn-outline-danger">
+                                Cancelar
+                            </a>
+                        {% else %}
+                            <span class="text-muted">Sem ações</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-state">
+                        Nenhuma matrícula encontrada.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,5 +1,7 @@
 from django.urls import path
+
 from . import views
+
 
 urlpatterns = [
     path("", views.listar_matriculas, name="matriculas_list"),

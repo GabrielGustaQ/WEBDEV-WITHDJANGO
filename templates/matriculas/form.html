@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Nova matrícula | Pré-Matrícula{% endblock %}
+
+{% block page_title %}Nova matrícula{% endblock %}
+{% block page_subtitle %}Selecione o aluno e a disciplina para realizar a pré-matrícula{% endblock %}
+
+{% block content %}
+<form method="post" class="form-panel">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">{{ form.aluno.label }}</label>
+            {{ form.aluno }}
+            <div class="form-error">{{ form.aluno.errors }}</div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">{{ form.disciplina.label }}</label>
+            {{ form.disciplina }}
+            <div class="form-error">{{ form.disciplina.errors }}</div>
+        </div>
+    </div>
+
+    <div class="info-box mt-4">
+        <i class="bi bi-info-circle"></i>
+        O sistema validará automaticamente se o aluno já está matriculado e se ainda existem vagas disponíveis.
+    </div>
+
+    <div class="form-actions">
+        <a href="{% url 'matriculas_list' %}" class="btn btn-outline-secondary">
+            Cancelar
+        </a>
+
+        <button type="submit" class="btn btn-primary">
+            Realizar matrícula
+        </button>
+    </div>
+</form>
+{% endblock %}

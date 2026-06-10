@@ -2,13 +2,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import redirect, render, get_object_or_404
 
+from apps.accounts.views import usuario_secretaria
+
 from .forms import MatriculaForm
 from .models import Matricula
 from .services import realizar_matricula, cancelar_matricula
-
-
-def usuario_secretaria(user):
-    return user.is_superuser or user.groups.filter(name="Secretaria").exists()
 
 
 @login_required
@@ -16,11 +14,11 @@ def usuario_secretaria(user):
 def listar_matriculas(request):
     matriculas = Matricula.objects.select_related(
         "aluno",
-        "disciplina"
+        "disciplina",
     ).all()
 
     return render(request, "matriculas/list.html", {
-        "matriculas": matriculas
+        "matriculas": matriculas,
     })
 
 
@@ -44,7 +42,7 @@ def nova_matricula(request):
         form = MatriculaForm()
 
     return render(request, "matriculas/form.html", {
-        "form": form
+        "form": form,
     })
 
 
@@ -69,11 +67,11 @@ def minhas_matriculas(request):
         return redirect("dashboard")
 
     matriculas = Matricula.objects.select_related(
-        "disciplina"
+        "disciplina",
     ).filter(
-        aluno=request.user.aluno
+        aluno=request.user.aluno,
     )
 
     return render(request, "matriculas/list.html", {
-        "matriculas": matriculas
+        "matriculas": matriculas,
     })

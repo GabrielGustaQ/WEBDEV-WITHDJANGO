@@ -1,19 +1,50 @@
 {% extends "base.html" %}
 
+{% block title %}Dashboard | Pré-Matrícula{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Resumo das principais operações do sistema{% endblock %}
+
 {% block content %}
-<h1 class="h3">Dashboard</h1>
-
-<p>Bem-vindo ao Sistema de Pré-Matrícula Acadêmica.</p>
-
-<div class="list-group">
-    <a href="{% url 'matriculas_list' %}" class="list-group-item list-group-item-action">
-        Gerenciar Matrículas
+<div class="dashboard-grid">
+    <a href="{% url 'alunos_list' %}" class="dashboard-card">
+        <div class="dashboard-icon">
+            <i class="bi bi-people"></i>
+        </div>
+        <div>
+            <h2>Alunos</h2>
+            <p>Cadastre, consulte e atualize alunos.</p>
+        </div>
     </a>
-    <a href="{% url 'matriculas_create' %}" class="list-group-item list-group-item-action">
-        Nova Pré-Matrícula
+
+    <a href="{% url 'disciplinas_list' %}" class="dashboard-card">
+        <div class="dashboard-icon">
+            <i class="bi bi-journal-bookmark"></i>
+        </div>
+        <div>
+            <h2>Disciplinas</h2>
+            <p>Gerencie disciplinas, períodos e vagas.</p>
+        </div>
     </a>
-    <a href="{% url 'minhas_matriculas' %}" class="list-group-item list-group-item-action">
-        Minhas Matrículas
+
+    <a href="{% url 'matriculas_list' %}" class="dashboard-card">
+        <div class="dashboard-icon">
+            <i class="bi bi-card-checklist"></i>
+        </div>
+        <div>
+            <h2>Matrículas</h2>
+            <p>Realize e acompanhe pré-matrículas.</p>
+        </div>
+    </a>
+
+    <a href="{% url 'relatorio_disciplinas_com_vagas' %}" class="dashboard-card">
+        <div class="dashboard-icon">
+            <i class="bi bi-bar-chart"></i>
+        </div>
+        <div>
+            <h2>Relatórios</h2>
+            <p>Consulte vagas, históricos e matrículas.</p>
+        </div>
     </a>
 </div>
 {% endblock %}

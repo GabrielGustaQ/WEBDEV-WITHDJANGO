@@ -5,12 +5,25 @@ from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 
+from apps.accounts.models import PerfilUsuario
+
 from .forms import AlunoForm
 from .models import Aluno
 
 
 def usuario_secretaria(user):
-    return user.is_superuser or user.groups.filter(name="Secretaria").exists()
+    return (
+        user.is_authenticated
+        and (
+            user.is_superuser
+            or user.is_staff
+            or user.groups.filter(name="Secretaria").exists()
+            or (
+                hasattr(user, "perfil")
+                and user.perfil.tipo == PerfilUsuario.Tipo.SECRETARIA
+            )
+        )
+    )
 
 
 @login_required
@@ -22,10 +35,10 @@ def listar_alunos(request):
 
     if busca:
         alunos = alunos.filter(
-            Q(nome__icontains=busca) |
-            Q(matricula__icontains=busca) |
-            Q(email__icontains=busca) |
-            Q(curso__icontains=busca)
+            Q(nome__icontains=busca)
+            | Q(matricula__icontains=busca)
+            | Q(email__icontains=busca)
+            | Q(curso__icontains=busca)
         )
 
     return render(request, "alunos/list.html", {
@@ -62,6 +75,14 @@ def criar_aluno(request):
 
             user.groups.add(grupo_aluno)
 
+            PerfilUsuario.objects.get_or_create(
+                user=user,
+                defaults={
+                    "tipo": PerfilUsuario.Tipo.ALUNO,
+                    "senha_temporaria": True,
+                }
+            )
+
             aluno.user = user
             aluno.save()
 
@@ -69,6 +90,7 @@ def criar_aluno(request):
                 request,
                 "Aluno cadastrado com sucesso. Senha inicial: aluno123"
             )
+
             return redirect("alunos_list")
     else:
         form = AlunoForm()

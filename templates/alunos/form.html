@@ -1,15 +1,19 @@
 {% extends "base.html" %}
 
-{% block content %}
-<h1 class="h3 mb-3">
-    {% if aluno %}
-        Editar Aluno
-    {% else %}
-        Novo Aluno
-    {% endif %}
-</h1>
+{% block title %}
+    {% if aluno %}Editar aluno{% else %}Novo aluno{% endif %} | Pré-Matrícula
+{% endblock %}
 
-<form method="post">
+{% block page_title %}
+    {% if aluno %}Editar aluno{% else %}Novo aluno{% endif %}
+{% endblock %}
+
+{% block page_subtitle %}
+    Preencha os dados cadastrais do aluno
+{% endblock %}
+
+{% block content %}
+<form method="post" class="form-panel">
     {% csrf_token %}
 
     {% if form.non_field_errors %}
@@ -18,49 +22,55 @@
         </div>
     {% endif %}
 
-    <div class="mb-3">
-        <label class="form-label">{{ form.nome.label }}</label>
-        {{ form.nome }}
-        {{ form.nome.errors }}
+    <div class="row g-3">
+        <div class="col-md-8">
+            <label class="form-label">{{ form.nome.label }}</label>
+            {{ form.nome }}
+            <div class="form-error">{{ form.nome.errors }}</div>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">{{ form.matricula.label }}</label>
+            {{ form.matricula }}
+            <div class="form-error">{{ form.matricula.errors }}</div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">{{ form.email.label }}</label>
+            {{ form.email }}
+            <div class="form-error">{{ form.email.errors }}</div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">{{ form.telefone.label }}</label>
+            {{ form.telefone }}
+            <div class="form-error">{{ form.telefone.errors }}</div>
+        </div>
+
+        <div class="col-md-8">
+            <label class="form-label">{{ form.curso.label }}</label>
+            {{ form.curso }}
+            <div class="form-error">{{ form.curso.errors }}</div>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+            <div class="form-check mb-2">
+                {{ form.ativo }}
+                <label class="form-check-label">
+                    {{ form.ativo.label }}
+                </label>
+            </div>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">{{ form.matricula.label }}</label>
-        {{ form.matricula }}
-        {{ form.matricula.errors }}
+    <div class="form-actions">
+        <a href="{% url 'alunos_list' %}" class="btn btn-outline-secondary">
+            Cancelar
+        </a>
+
+        <button type="submit" class="btn btn-primary">
+            Salvar
+        </button>
     </div>
-
-    <div class="mb-3">
-        <label class="form-label">{{ form.email.label }}</label>
-        {{ form.email }}
-        {{ form.email.errors }}
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">{{ form.curso.label }}</label>
-        {{ form.curso }}
-        {{ form.curso.errors }}
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">{{ form.telefone.label }}</label>
-        {{ form.telefone }}
-        {{ form.telefone.errors }}
-    </div>
-
-    <div class="form-check mb-3">
-        {{ form.ativo }}
-        <label class="form-check-label">
-            {{ form.ativo.label }}
-        </label>
-    </div>
-
-    <button type="submit" class="btn btn-success">
-        Salvar
-    </button>
-
-    <a href="{% url 'alunos_list' %}" class="btn btn-secondary">
-        Voltar
-    </a>
 </form>
 {% endblock %}

@@ -8,6 +8,7 @@ class Aluno(models.Model):
         on_delete=models.PROTECT,
         related_name="aluno"
     )
+
     nome = models.CharField(max_length=150)
     matricula = models.CharField(max_length=30, unique=True)
     email = models.EmailField(unique=True)

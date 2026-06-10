@@ -2,12 +2,13 @@ from django.db import transaction
 from django.utils import timezone
 
 from apps.disciplinas.models import Disciplina
-from apps.matriculas.models import Matricula
+
+from .models import Matricula
 
 
 @transaction.atomic
 def realizar_matricula(aluno, disciplina):
-    disciplina = Disciplina.objects.select_for_update().get(id=disciplina.id)
+    disciplina = Disciplina.objects.select_for_update().get(pk=disciplina.pk)
 
     if not aluno.ativo:
         raise ValueError("Aluno inativo não pode realizar matrícula.")
@@ -48,7 +49,7 @@ def cancelar_matricula(matricula):
         raise ValueError("Esta matrícula já está cancelada.")
 
     disciplina = Disciplina.objects.select_for_update().get(
-        id=matricula.disciplina.id
+        pk=matricula.disciplina.pk
     )
 
     matricula.status = Matricula.STATUS_CANCELADA
