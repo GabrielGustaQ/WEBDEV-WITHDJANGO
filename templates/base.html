@@ -41,37 +41,67 @@
                 Dashboard
             </a>
 
-            <a href="{% url 'alunos_list' %}">
-                <i class="bi bi-people"></i>
-                Alunos
-            </a>
+            {% if user.perfil.is_secretaria %}
+                <a href="{% url 'alunos_list' %}">
+                    <i class="bi bi-people"></i>
+                    Alunos
+                </a>
 
-            <a href="{% url 'disciplinas_list' %}">
-                <i class="bi bi-journal-bookmark"></i>
-                Disciplinas
-            </a>
+                <a href="{% url 'disciplinas_list' %}">
+                    <i class="bi bi-journal-bookmark"></i>
+                    Disciplinas
+                </a>
 
-            <a href="{% url 'matriculas_list' %}">
-                <i class="bi bi-card-checklist"></i>
-                Matrículas
-            </a>
+                <a href="{% url 'turmas_list' %}">
+                    <i class="bi bi-calendar3"></i>
+                    Turmas
+                </a>
 
-            <div class="sidebar-section">Relatórios</div>
+                <a href="{% url 'matriculas_list' %}">
+                    <i class="bi bi-card-checklist"></i>
+                    Matrículas
+                </a>
 
-            <a href="{% url 'relatorio_matriculas_por_disciplina' %}">
-                <i class="bi bi-file-earmark-text"></i>
-                Por disciplina
-            </a>
+                <div class="sidebar-section">Relatórios</div>
 
-            <a href="{% url 'relatorio_disciplinas_com_vagas' %}">
-                <i class="bi bi-bar-chart"></i>
-                Vagas disponíveis
-            </a>
+                <a href="{% url 'relatorio_matriculas_por_disciplina' %}">
+                    <i class="bi bi-file-earmark-text"></i>
+                    Por disciplina
+                </a>
 
-            <a href="{% url 'relatorio_historico_aluno' %}">
-                <i class="bi bi-clock-history"></i>
-                Histórico do aluno
-            </a>
+                <a href="{% url 'relatorio_disciplinas_com_vagas' %}">
+                    <i class="bi bi-bar-chart"></i>
+                    Vagas disponíveis
+                </a>
+
+                <a href="{% url 'relatorio_historico_aluno' %}">
+                    <i class="bi bi-clock-history"></i>
+                    Histórico do aluno
+                </a>
+
+            {% else %}
+                <a href="{% url 'matriculas_matricular' %}">
+                    <i class="bi bi-plus-circle"></i>
+                    Matricular-se
+                </a>
+
+                <a href="{% url 'minhas_matriculas' %}">
+                    <i class="bi bi-card-checklist"></i>
+                    Minhas Matrículas
+                </a>
+
+                <div class="sidebar-section">Consultas</div>
+
+                <a href="{% url 'relatorio_vagas_aluno' %}">
+                    <i class="bi bi-bar-chart"></i>
+                    Vagas disponíveis
+                </a>
+
+                <a href="{% url 'relatorio_meu_historico' %}">
+                    <i class="bi bi-clock-history"></i>
+                    Meu histórico
+                </a>
+            {% endif %}
         </nav>
     </aside>
 

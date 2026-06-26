@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if turma %}Editar turma{% else %}Nova turma{% endif %} | Pré-Matrícula
+{% endblock %}
+
+{% block page_title %}
+    {% if turma %}Editar turma{% else %}Nova turma{% endif %}
+{% endblock %}
+
+{% block page_subtitle %}
+    Informe os dados da turma e a quantidade de vagas
+{% endblock %}
+
+{% block content %}
+<form method="post" class="form-panel">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <div class="row g-3">
+        <div class="col-md-8">
+            <label class="form-label">{{ form.disciplina.label }}</label>
+            {{ form.disciplina }}
+            <div class="form-error">{{ form.disciplina.errors }}</div>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">{{ form.periodo_letivo.label }}</label>
+            {{ form.periodo_letivo }}
+            <div class="form-error">{{ form.periodo_letivo.errors }}</div>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">{{ form.vagas_total.label }}</label>
+            {{ form.vagas_total }}
+            <div class="form-error">{{ form.vagas_total.errors }}</div>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">{{ form.vagas_disponiveis.label }}</label>
+            {{ form.vagas_disponiveis }}
+            <div class="form-error">{{ form.vagas_disponiveis.errors }}</div>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+            <div class="form-check mb-2">
+                {{ form.ativa }}
+                <label class="form-check-label">
+                    {{ form.ativa.label }}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <a href="{% url 'turmas_list' %}" class="btn btn-outline-secondary">
+            Cancelar
+        </a>
+
+        <button type="submit" class="btn btn-primary">
+            Salvar
+        </button>
+    </div>
+</form>
+{% endblock %}

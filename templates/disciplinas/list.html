@@ -3,7 +3,7 @@
 {% block title %}Disciplinas | Pré-Matrícula{% endblock %}
 
 {% block page_title %}Disciplinas{% endblock %}
-{% block page_subtitle %}Consulta e gerenciamento de disciplinas ofertadas{% endblock %}
+{% block page_subtitle %}Cadastro e gerenciamento de disciplinas{% endblock %}
 
 {% block content %}
 <div class="page-actions">
@@ -12,7 +12,7 @@
             type="text"
             name="q"
             class="form-control"
-            placeholder="Buscar por nome, código ou período"
+            placeholder="Buscar por nome ou código"
             value="{{ busca|default:'' }}"
         >
 
@@ -34,10 +34,8 @@
             <tr>
                 <th>Código</th>
                 <th>Nome</th>
-                <th>Período</th>
                 <th>Carga horária</th>
-                <th>Vagas</th>
-                <th>Status</th>
+                <th>Turmas</th>
                 <th class="text-end">Ações</th>
             </tr>
         </thead>
@@ -50,21 +48,19 @@
                     </td>
 
                     <td>{{ disciplina.nome }}</td>
-                    <td>{{ disciplina.periodo_letivo }}</td>
-                    <td>{{ disciplina.carga_horaria }}h</td>
 
                     <td>
-                        <span class="badge text-bg-light">
-                            {{ disciplina.vagas_disponiveis }}/{{ disciplina.vagas_total }} disponíveis
-                        </span>
+                        {% if disciplina.carga_horaria %}
+                            {{ disciplina.carga_horaria }}h
+                        {% else %}
+                            <span class="text-muted">—</span>
+                        {% endif %}
                     </td>
 
                     <td>
-                        {% if disciplina.ativa %}
-                            <span class="badge text-bg-success">Ativa</span>
-                        {% else %}
-                            <span class="badge text-bg-secondary">Inativa</span>
-                        {% endif %}
+                        <span class="badge text-bg-light">
+                            {{ disciplina.turmas.count }} turma(s)
+                        </span>
                     </td>
 
                     <td class="text-end">
@@ -79,7 +75,7 @@
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="7" class="empty-state">
+                    <td colspan="5" class="empty-state">
                         Nenhuma disciplina encontrada.
                     </td>
                 </tr>

@@ -1,48 +1,42 @@
 {% extends "base.html" %}
 
-{% block title %}Matrículas por disciplina | Pré-Matrícula{% endblock %}
+{% block title %}Meu histórico | Pré-Matrícula{% endblock %}
 
-{% block page_title %}Matrículas por disciplina{% endblock %}
-{% block page_subtitle %}Relação de alunos matriculados em uma disciplina{% endblock %}
+{% block page_title %}Meu histórico{% endblock %}
+{% block page_subtitle %}Pré-matrículas realizadas por você{% endblock %}
 
 {% block content %}
 <div class="page-actions">
-    <form method="get" class="search-form">
-        <input
-            type="text"
-            name="disciplina"
-            class="form-control"
-            placeholder="Código ou nome da disciplina"
-            value="{{ disciplina_busca|default:'' }}"
-        >
-
-        <input
-            type="text"
-            name="periodo"
-            class="form-control"
-            placeholder="Período"
-            value="{{ periodo|default:'' }}"
-        >
-
-        <button class="btn btn-outline-primary" type="submit">
-            Filtrar
-        </button>
-    </form>
-
+    <div></div>
     <button onclick="window.print()" class="btn btn-outline-secondary">
         <i class="bi bi-printer"></i>
         Imprimir
     </button>
 </div>
 
+<div class="student-summary">
+    <div>
+        <small>Aluno</small>
+        <strong>{{ aluno.nome }}</strong>
+    </div>
+
+    <div>
+        <small>Matrícula</small>
+        <strong>{{ aluno.matricula }}</strong>
+    </div>
+
+    <div>
+        <small>Curso</small>
+        <strong>{{ aluno.curso }}</strong>
+    </div>
+</div>
+
 <div class="table-responsive">
     <table class="table align-middle">
         <thead>
             <tr>
-                <th>Aluno</th>
-                <th>Matrícula</th>
-                <th>Curso</th>
                 <th>Disciplina</th>
+                <th>Código</th>
                 <th>Período</th>
                 <th>Data</th>
                 <th>Status</th>
@@ -52,10 +46,8 @@
         <tbody>
             {% for matricula in matriculas %}
                 <tr>
-                    <td><strong>{{ matricula.aluno.nome }}</strong></td>
-                    <td>{{ matricula.aluno.matricula }}</td>
-                    <td>{{ matricula.aluno.curso }}</td>
-                    <td>{{ matricula.turma.disciplina.nome }}</td>
+                    <td><strong>{{ matricula.turma.disciplina.nome }}</strong></td>
+                    <td>{{ matricula.turma.disciplina.codigo }}</td>
                     <td>{{ matricula.turma.periodo_letivo }}</td>
                     <td>{{ matricula.criada_em|date:"d/m/Y H:i" }}</td>
                     <td>
@@ -72,8 +64,8 @@
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="7" class="empty-state">
-                        Nenhuma matrícula encontrada.
+                    <td colspan="5" class="empty-state">
+                        Você ainda não possui pré-matrículas registradas.
                     </td>
                 </tr>
             {% endfor %}

@@ -1,44 +1,42 @@
 from django.db import transaction
 from django.utils import timezone
 
-from apps.disciplinas.models import Disciplina
+from apps.disciplinas.models import Turma
 
 from .models import Matricula
 
 
 @transaction.atomic
-def realizar_matricula(aluno, disciplina):
-    disciplina = Disciplina.objects.select_for_update().get(pk=disciplina.pk)
+def realizar_matricula(aluno, turma):
+    turma = Turma.objects.select_for_update().get(pk=turma.pk)
 
     if not aluno.ativo:
         raise ValueError("Aluno inativo não pode realizar matrícula.")
 
-    if not disciplina.ativa:
-        raise ValueError("Disciplina inativa não pode receber matrícula.")
+    if not turma.ativa:
+        raise ValueError("Turma inativa não pode receber matrícula.")
 
-    if disciplina.vagas_disponiveis <= 0:
-        raise ValueError("Não há vagas disponíveis para esta disciplina.")
+    if turma.vagas_disponiveis <= 0:
+        raise ValueError("Não há vagas disponíveis para esta turma.")
 
     ja_matriculado = Matricula.objects.filter(
         aluno=aluno,
-        disciplina=disciplina,
-        periodo_letivo=disciplina.periodo_letivo,
+        turma=turma,
     ).exclude(
         status=Matricula.STATUS_CANCELADA
     ).exists()
 
     if ja_matriculado:
-        raise ValueError("Aluno já possui matrícula ativa nesta disciplina e período.")
+        raise ValueError("Aluno já possui matrícula ativa nesta turma.")
 
     matricula = Matricula.objects.create(
         aluno=aluno,
-        disciplina=disciplina,
-        periodo_letivo=disciplina.periodo_letivo,
+        turma=turma,
         status=Matricula.STATUS_CONFIRMADA,
     )
 
-    disciplina.vagas_disponiveis -= 1
-    disciplina.save(update_fields=["vagas_disponiveis"])
+    turma.vagas_disponiveis -= 1
+    turma.save(update_fields=["vagas_disponiveis"])
 
     return matricula
 
@@ -48,16 +46,14 @@ def cancelar_matricula(matricula):
     if matricula.status == Matricula.STATUS_CANCELADA:
         raise ValueError("Esta matrícula já está cancelada.")
 
-    disciplina = Disciplina.objects.select_for_update().get(
-        pk=matricula.disciplina.pk
-    )
+    turma = Turma.objects.select_for_update().get(pk=matricula.turma.pk)
 
     matricula.status = Matricula.STATUS_CANCELADA
     matricula.cancelada_em = timezone.now()
     matricula.save(update_fields=["status", "cancelada_em"])
 
-    if disciplina.ativa:
-        disciplina.vagas_disponiveis += 1
-        disciplina.save(update_fields=["vagas_disponiveis"])
+    if turma.ativa:
+        turma.vagas_disponiveis += 1
+        turma.save(update_fields=["vagas_disponiveis"])
 
     return matricula

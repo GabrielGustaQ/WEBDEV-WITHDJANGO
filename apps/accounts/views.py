@@ -86,7 +86,18 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    return render(request, "dashboard.html")
+    perfil = obter_ou_criar_perfil(request.user)
+    context = {"perfil": perfil}
+
+    if perfil.is_aluno and hasattr(request.user, "aluno"):
+        from apps.matriculas.models import Matricula
+        aluno = request.user.aluno
+        matriculas = Matricula.objects.filter(aluno=aluno)
+        context["total_matriculas"] = matriculas.count()
+        context["confirmadas"] = matriculas.filter(status=Matricula.STATUS_CONFIRMADA).count()
+        context["pendentes"] = matriculas.filter(status=Matricula.STATUS_PENDENTE).count()
+
+    return render(request, "dashboard.html", context)
 
 
 @login_required

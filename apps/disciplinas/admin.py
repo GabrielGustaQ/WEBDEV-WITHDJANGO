@@ -1,31 +1,33 @@
 from django.contrib import admin
 
-from .models import Disciplina
+from .models import Disciplina, Turma
 
 
 @admin.register(Disciplina)
 class DisciplinaAdmin(admin.ModelAdmin):
+    list_display = ("codigo", "nome", "carga_horaria")
+
+    search_fields = ("codigo", "nome")
+
+    ordering = ("nome",)
+
+
+@admin.register(Turma)
+class TurmaAdmin(admin.ModelAdmin):
     list_display = (
-        "codigo",
-        "nome",
+        "disciplina",
         "periodo_letivo",
-        "carga_horaria",
         "vagas_total",
         "vagas_disponiveis",
         "ativa",
     )
 
-    list_filter = (
-        "ativa",
-        "periodo_letivo",
-    )
+    list_filter = ("ativa", "periodo_letivo", "disciplina")
 
     search_fields = (
-        "codigo",
-        "nome",
+        "disciplina__codigo",
+        "disciplina__nome",
         "periodo_letivo",
     )
 
-    ordering = (
-        "nome",
-    )
+    ordering = ("disciplina__nome", "periodo_letivo")

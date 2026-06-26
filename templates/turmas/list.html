@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Turmas | Pré-Matrícula{% endblock %}
+
+{% block page_title %}Turmas{% endblock %}
+{% block page_subtitle %}Consulta e gerenciamento de turmas ofertadas{% endblock %}
+
+{% block content %}
+<div class="page-actions">
+    <form method="get" class="search-form">
+        <input
+            type="text"
+            name="q"
+            class="form-control"
+            placeholder="Buscar por nome, código ou período"
+            value="{{ busca|default:'' }}"
+        >
+
+        <button class="btn btn-outline-primary" type="submit">
+            <i class="bi bi-search"></i>
+            Buscar
+        </button>
+    </form>
+
+    <a href="{% url 'turmas_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i>
+        Nova turma
+    </a>
+</div>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Disciplina</th>
+                <th>Período</th>
+                <th>Vagas</th>
+                <th>Status</th>
+                <th class="text-end">Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for turma in turmas %}
+                <tr>
+                    <td>
+                        <strong>{{ turma.disciplina.codigo }}</strong>
+                    </td>
+
+                    <td>{{ turma.disciplina.nome }}</td>
+                    <td>{{ turma.periodo_letivo }}</td>
+
+                    <td>
+                        <span class="badge text-bg-light">
+                            {{ turma.vagas_disponiveis }}/{{ turma.vagas_total }} disponíveis
+                        </span>
+                    </td>
+
+                    <td>
+                        {% if turma.ativa %}
+                            <span class="badge text-bg-success">Ativa</span>
+                        {% else %}
+                            <span class="badge text-bg-secondary">Inativa</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="text-end">
+                        <a href="{% url 'turmas_update' turma.id %}" class="btn btn-sm btn-outline-secondary">
+                            Editar
+                        </a>
+
+                        <a href="{% url 'turmas_delete' turma.id %}" class="btn btn-sm btn-outline-danger">
+                            Excluir
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-state">
+                        Nenhuma turma encontrada.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

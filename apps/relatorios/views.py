@@ -1,10 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from apps.accounts.views import usuario_secretaria
 from apps.alunos.models import Aluno
-from apps.disciplinas.models import Disciplina
+from apps.disciplinas.models import Turma
 from apps.matriculas.models import Matricula
 
 
@@ -16,18 +17,19 @@ def matriculas_por_disciplina(request):
 
     matriculas = Matricula.objects.select_related(
         "aluno",
-        "disciplina",
+        "turma",
+        "turma__disciplina",
     ).all()
 
     if disciplina_busca:
         matriculas = matriculas.filter(
-            Q(disciplina__nome__icontains=disciplina_busca)
-            | Q(disciplina__codigo__icontains=disciplina_busca)
+            Q(turma__disciplina__nome__icontains=disciplina_busca)
+            | Q(turma__disciplina__codigo__icontains=disciplina_busca)
         )
 
     if periodo:
         matriculas = matriculas.filter(
-            periodo_letivo__icontains=periodo
+            turma__periodo_letivo__icontains=periodo
         )
 
     return render(request, "relatorios/matriculas_por_disciplina.html", {
@@ -42,17 +44,33 @@ def matriculas_por_disciplina(request):
 def disciplinas_com_vagas(request):
     periodo = request.GET.get("periodo", "")
 
-    disciplinas = Disciplina.objects.filter(
-        ativa=True
-    ).order_by("nome")
+    turmas = Turma.objects.filter(
+        ativa=True,
+    ).select_related("disciplina").order_by("vagas_disponiveis", "disciplina__nome", "periodo_letivo")
 
     if periodo:
-        disciplinas = disciplinas.filter(
-            periodo_letivo__icontains=periodo
-        )
+        turmas = turmas.filter(periodo_letivo__icontains=periodo)
 
     return render(request, "relatorios/disciplinas_com_vagas.html", {
-        "disciplinas": disciplinas,
+        "turmas": turmas,
+        "periodo": periodo,
+    })
+
+
+@login_required
+def disciplinas_com_vagas_aluno(request):
+    periodo = request.GET.get("periodo", "")
+
+    turmas = Turma.objects.filter(
+        ativa=True,
+        vagas_disponiveis__gt=0,
+    ).select_related("disciplina").order_by("-vagas_disponiveis", "disciplina__nome", "periodo_letivo")
+
+    if periodo:
+        turmas = turmas.filter(periodo_letivo__icontains=periodo)
+
+    return render(request, "relatorios/disciplinas_com_vagas.html", {
+        "turmas": turmas,
         "periodo": periodo,
     })
 
@@ -73,7 +91,8 @@ def historico_aluno(request):
 
         if aluno:
             matriculas = Matricula.objects.select_related(
-                "disciplina",
+                "turma",
+                "turma__disciplina",
             ).filter(
                 aluno=aluno,
             )
@@ -82,4 +101,22 @@ def historico_aluno(request):
         "aluno": aluno,
         "matriculas": matriculas,
         "aluno_busca": aluno_busca,
+    })
+
+
+@login_required
+def meu_historico(request):
+    if not hasattr(request.user, "aluno"):
+        messages.error(request, "Usuário não possui perfil de aluno.")
+        return redirect("dashboard")
+
+    aluno = request.user.aluno
+    matriculas = Matricula.objects.select_related(
+        "turma",
+        "turma__disciplina",
+    ).filter(aluno=aluno)
+
+    return render(request, "relatorios/meu_historico.html", {
+        "aluno": aluno,
+        "matriculas": matriculas,
     })

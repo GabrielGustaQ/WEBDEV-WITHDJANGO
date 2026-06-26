@@ -8,4 +8,5 @@ urlpatterns = [
     path("nova/", views.nova_matricula, name="matriculas_create"),
     path("<int:pk>/cancelar/", views.cancelar, name="matriculas_cancelar"),
     path("minhas/", views.minhas_matriculas, name="minhas_matriculas"),
+    path("matricular/", views.matricular_aluno, name="matriculas_matricular"),
 ]

@@ -2,8 +2,8 @@
 
 {% block title %}Relatório de vagas | Pré-Matrícula{% endblock %}
 
-{% block page_title %}Disciplinas com vagas{% endblock %}
-{% block page_subtitle %}Relatório de disponibilidade por disciplina{% endblock %}
+{% block page_title %}Turmas com vagas{% endblock %}
+{% block page_subtitle %}Relatório de disponibilidade de vagas por turma{% endblock %}
 
 {% block content %}
 <div class="page-actions">
@@ -41,17 +41,17 @@
         </thead>
 
         <tbody>
-            {% for disciplina in disciplinas %}
+            {% for turma in turmas %}
                 <tr>
-                    <td><strong>{{ disciplina.codigo }}</strong></td>
-                    <td>{{ disciplina.nome }}</td>
-                    <td>{{ disciplina.periodo_letivo }}</td>
-                    <td>{{ disciplina.vagas_total }}</td>
-                    <td>{{ disciplina.vagas_ocupadas }}</td>
+                    <td><strong>{{ turma.disciplina.codigo }}</strong></td>
+                    <td>{{ turma.disciplina.nome }}</td>
+                    <td>{{ turma.periodo_letivo }}</td>
+                    <td>{{ turma.vagas_total }}</td>
+                    <td>{{ turma.vagas_ocupadas }}</td>
                     <td>
-                        {% if disciplina.vagas_disponiveis > 0 %}
+                        {% if turma.vagas_disponiveis > 0 %}
                             <span class="badge text-bg-success">
-                                {{ disciplina.vagas_disponiveis }}
+                                {{ turma.vagas_disponiveis }}
                             </span>
                         {% else %}
                             <span class="badge text-bg-danger">
@@ -63,7 +63,7 @@
             {% empty %}
                 <tr>
                     <td colspan="6" class="empty-state">
-                        Nenhuma disciplina encontrada.
+                        Nenhuma turma encontrada.
                     </td>
                 </tr>
             {% endfor %}

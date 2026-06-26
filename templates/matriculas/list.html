@@ -2,48 +2,56 @@
 
 {% block title %}Matrículas | Pré-Matrícula{% endblock %}
 
-{% block page_title %}Matrículas{% endblock %}
-{% block page_subtitle %}Consulta das pré-matrículas realizadas{% endblock %}
+{% block page_title %}{% if is_aluno_view %}Minhas Matrículas{% else %}Matrículas{% endif %}{% endblock %}
+{% block page_subtitle %}{% if is_aluno_view %}Suas pré-matrículas realizadas{% else %}Consulta das pré-matrículas realizadas{% endif %}{% endblock %}
 
 {% block content %}
 <div class="page-actions">
     <div></div>
 
-    <a href="{% url 'matriculas_create' %}" class="btn btn-primary">
-        <i class="bi bi-plus-lg"></i>
-        Nova matrícula
-    </a>
+    {% if not is_aluno_view %}
+        <a href="{% url 'matriculas_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i>
+            Nova matrícula
+        </a>
+    {% endif %}
 </div>
 
 <div class="table-responsive">
     <table class="table align-middle">
         <thead>
             <tr>
-                <th>Aluno</th>
+                {% if not is_aluno_view %}
+                    <th>Aluno</th>
+                {% endif %}
                 <th>Disciplina</th>
                 <th>Período</th>
                 <th>Data</th>
                 <th>Status</th>
-                <th class="text-end">Ações</th>
+                {% if not is_aluno_view %}
+                    <th class="text-end">Ações</th>
+                {% endif %}
             </tr>
         </thead>
 
         <tbody>
             {% for matricula in matriculas %}
                 <tr>
-                    <td>
-                        <strong>{{ matricula.aluno.nome }}</strong>
-                        <br>
-                        <small class="text-muted">{{ matricula.aluno.matricula }}</small>
-                    </td>
+                    {% if not is_aluno_view %}
+                        <td>
+                            <strong>{{ matricula.aluno.nome }}</strong>
+                            <br>
+                            <small class="text-muted">{{ matricula.aluno.matricula }}</small>
+                        </td>
+                    {% endif %}
 
                     <td>
-                        {{ matricula.disciplina.nome }}
+                        {{ matricula.turma.disciplina.nome }}
                         <br>
-                        <small class="text-muted">{{ matricula.disciplina.codigo }}</small>
+                        <small class="text-muted">{{ matricula.turma.disciplina.codigo }}</small>
                     </td>
 
-                    <td>{{ matricula.periodo_letivo }}</td>
+                    <td>{{ matricula.turma.periodo_letivo }}</td>
 
                     <td>{{ matricula.criada_em|date:"d/m/Y H:i" }}</td>
 
@@ -59,20 +67,26 @@
                         {% endif %}
                     </td>
 
-                    <td class="text-end">
-                        {% if matricula.status != "cancelada" %}
-                            <a href="{% url 'matriculas_cancelar' matricula.id %}" class="btn btn-sm btn-outline-danger">
-                                Cancelar
-                            </a>
-                        {% else %}
-                            <span class="text-muted">Sem ações</span>
-                        {% endif %}
-                    </td>
+                    {% if not is_aluno_view %}
+                        <td class="text-end">
+                            {% if matricula.status != "cancelada" %}
+                                <a href="{% url 'matriculas_cancelar' matricula.id %}" class="btn btn-sm btn-outline-danger">
+                                    Cancelar
+                                </a>
+                            {% else %}
+                                <span class="text-muted">Sem ações</span>
+                            {% endif %}
+                        </td>
+                    {% endif %}
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="6" class="empty-state">
-                        Nenhuma matrícula encontrada.
+                    <td colspan="{% if is_aluno_view %}3{% else %}6{% endif %}" class="empty-state">
+                        {% if is_aluno_view %}
+                            Você ainda não possui pré-matrículas registradas.
+                        {% else %}
+                            Nenhuma matrícula encontrada.
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

@@ -1,7 +1,7 @@
 from django import forms
 
 from apps.alunos.models import Aluno
-from apps.disciplinas.models import Disciplina
+from apps.disciplinas.models import Turma
 
 
 class MatriculaForm(forms.Form):
@@ -10,15 +10,15 @@ class MatriculaForm(forms.Form):
         queryset=Aluno.objects.none(),
         widget=forms.Select(attrs={
             "class": "form-select",
-        })
+        }),
     )
 
-    disciplina = forms.ModelChoiceField(
-        label="Disciplina",
-        queryset=Disciplina.objects.none(),
+    turma = forms.ModelChoiceField(
+        label="Turma",
+        queryset=Turma.objects.none(),
         widget=forms.Select(attrs={
             "class": "form-select",
-        })
+        }),
     )
 
     def __init__(self, *args, **kwargs):
@@ -28,7 +28,7 @@ class MatriculaForm(forms.Form):
             ativo=True
         ).order_by("nome")
 
-        self.fields["disciplina"].queryset = Disciplina.objects.filter(
+        self.fields["turma"].queryset = Turma.objects.filter(
             ativa=True,
             vagas_disponiveis__gt=0,
-        ).order_by("nome")
+        ).select_related("disciplina").order_by("disciplina__nome", "periodo_letivo")

@@ -61,9 +61,9 @@
         <tbody>
             {% for matricula in matriculas %}
                 <tr>
-                    <td><strong>{{ matricula.disciplina.nome }}</strong></td>
-                    <td>{{ matricula.disciplina.codigo }}</td>
-                    <td>{{ matricula.periodo_letivo }}</td>
+                    <td><strong>{{ matricula.turma.disciplina.nome }}</strong></td>
+                    <td>{{ matricula.turma.disciplina.codigo }}</td>
+                    <td>{{ matricula.turma.periodo_letivo }}</td>
                     <td>{{ matricula.criada_em|date:"d/m/Y H:i" }}</td>
                     <td>
                         {% if matricula.status == "confirmada" %}

@@ -19,4 +19,14 @@ urlpatterns = [
         views.historico_aluno,
         name="relatorio_historico_aluno",
     ),
+    path(
+        "vagas/",
+        views.disciplinas_com_vagas_aluno,
+        name="relatorio_vagas_aluno",
+    ),
+    path(
+        "meu-historico/",
+        views.meu_historico,
+        name="relatorio_meu_historico",
+    ),
 ]

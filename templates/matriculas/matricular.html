@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Matricular-se | Pré-Matrícula{% endblock %}
+
+{% block page_title %}Matricular-se{% endblock %}
+{% block page_subtitle %}Turmas disponíveis com vagas abertas{% endblock %}
+
+{% block content %}
+<div class="page-actions">
+    <form method="get" class="search-form">
+        <input
+            type="text"
+            name="q"
+            class="form-control"
+            placeholder="Buscar disciplina ou código"
+            value="{{ busca|default:'' }}"
+        >
+
+        <input
+            type="text"
+            name="periodo"
+            class="form-control"
+            placeholder="Filtrar por período. Ex: 2026.1"
+            value="{{ periodo|default:'' }}"
+        >
+
+        <button class="btn btn-outline-primary" type="submit">
+            <i class="bi bi-search"></i>
+            Buscar
+        </button>
+    </form>
+</div>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Disciplina</th>
+                <th>Período</th>
+                <th>Carga horária</th>
+                <th>Vagas disponíveis</th>
+                <th class="text-end">Ação</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for turma in turmas %}
+                <tr>
+                    <td><strong>{{ turma.disciplina.codigo }}</strong></td>
+                    <td>
+                        {{ turma.disciplina.nome }}
+                        {% if turma.disciplina.ementa %}
+                            <br>
+                            <small class="text-muted">{{ turma.disciplina.ementa|truncatechars:60 }}</small>
+                        {% endif %}
+                    </td>
+                    <td>{{ turma.periodo_letivo }}</td>
+                    <td>
+                        {% if turma.disciplina.carga_horaria %}
+                            {{ turma.disciplina.carga_horaria }}h
+                        {% else %}
+                            <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge text-bg-success">
+                            {{ turma.vagas_disponiveis }} vaga{{ turma.vagas_disponiveis|pluralize }}
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <form method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="turma_id" value="{{ turma.id }}">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                <i class="bi bi-plus-circle"></i>
+                                Matricular
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-state">
+                        Nenhuma turma disponível no momento ou você já está matriculado em todas.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

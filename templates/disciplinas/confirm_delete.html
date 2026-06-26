@@ -3,7 +3,7 @@
 {% block title %}Excluir disciplina | Pré-Matrícula{% endblock %}
 
 {% block page_title %}Excluir disciplina{% endblock %}
-{% block page_subtitle %}Confirmação de exclusão lógica da disciplina{% endblock %}
+{% block page_subtitle %}Confirmação de exclusão da disciplina{% endblock %}
 
 {% block content %}
 <div class="confirm-box">
@@ -16,9 +16,15 @@
     <p>
         A disciplina
         <strong>{{ disciplina.codigo }} - {{ disciplina.nome }}</strong>
-        será excluída se não possuir matrículas. Caso possua vínculos,
-        será marcada como inativa.
+        será excluída permanentemente.
     </p>
+
+    {% if disciplina.turmas.exists %}
+        <div class="alert alert-warning">
+            Esta disciplina possui <strong>{{ disciplina.turmas.count }} turma(s)</strong> vinculada(s)
+            e não pode ser excluída. Remova as turmas primeiro.
+        </div>
+    {% endif %}
 
     <form method="post" class="confirm-actions">
         {% csrf_token %}
@@ -27,9 +33,11 @@
             Cancelar
         </a>
 
-        <button type="submit" class="btn btn-danger">
-            Confirmar exclusão
-        </button>
+        {% if not disciplina.turmas.exists %}
+            <button type="submit" class="btn btn-danger">
+                Confirmar exclusão
+            </button>
+        {% endif %}
     </form>
 </div>
 {% endblock %}

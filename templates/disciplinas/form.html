@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block page_subtitle %}
-    Informe os dados da disciplina e a quantidade de vagas
+    Informe os dados da disciplina
 {% endblock %}
 
 {% block content %}
@@ -41,31 +41,10 @@
             <div class="form-error">{{ form.carga_horaria.errors }}</div>
         </div>
 
-        <div class="col-md-4">
-            <label class="form-label">{{ form.periodo_letivo.label }}</label>
-            {{ form.periodo_letivo }}
-            <div class="form-error">{{ form.periodo_letivo.errors }}</div>
-        </div>
-
-        <div class="col-md-4">
-            <label class="form-label">{{ form.vagas_total.label }}</label>
-            {{ form.vagas_total }}
-            <div class="form-error">{{ form.vagas_total.errors }}</div>
-        </div>
-
-        <div class="col-md-4">
-            <label class="form-label">{{ form.vagas_disponiveis.label }}</label>
-            {{ form.vagas_disponiveis }}
-            <div class="form-error">{{ form.vagas_disponiveis.errors }}</div>
-        </div>
-
-        <div class="col-md-8 d-flex align-items-end">
-            <div class="form-check mb-2">
-                {{ form.ativa }}
-                <label class="form-check-label">
-                    {{ form.ativa.label }}
-                </label>
-            </div>
+        <div class="col-12">
+            <label class="form-label">{{ form.ementa.label }}</label>
+            {{ form.ementa }}
+            <div class="form-error">{{ form.ementa.errors }}</div>
         </div>
     </div>
 

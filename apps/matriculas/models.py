@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Q
 
 from apps.alunos.models import Aluno
-from apps.disciplinas.models import Disciplina
+from apps.disciplinas.models import Turma
 
 
 class Matricula(models.Model):
@@ -22,13 +22,13 @@ class Matricula(models.Model):
         related_name="matriculas",
     )
 
-    disciplina = models.ForeignKey(
-        Disciplina,
+    turma = models.ForeignKey(
+        Turma,
         on_delete=models.PROTECT,
         related_name="matriculas",
+        null=True,
+        blank=True
     )
-
-    periodo_letivo = models.CharField(max_length=20)
 
     status = models.CharField(
         max_length=20,
@@ -45,11 +45,11 @@ class Matricula(models.Model):
         verbose_name_plural = "Matrículas"
         constraints = [
             models.UniqueConstraint(
-                fields=["aluno", "disciplina", "periodo_letivo"],
+                fields=["aluno", "turma"],
                 condition=~Q(status="cancelada"),
-                name="uniq_matricula_ativa_por_periodo",
+                name="uniq_matricula_ativa_por_turma",
             )
         ]
 
     def __str__(self):
-        return f"{self.aluno} - {self.disciplina} - {self.status}"
+        return f"{self.aluno} - {self.turma} - {self.status}"

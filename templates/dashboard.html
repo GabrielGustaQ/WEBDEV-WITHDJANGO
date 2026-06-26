@@ -6,6 +6,7 @@
 {% block page_subtitle %}Resumo das principais operações do sistema{% endblock %}
 
 {% block content %}
+{% if user.perfil.is_secretaria %}
 <div class="dashboard-grid">
     <a href="{% url 'alunos_list' %}" class="dashboard-card">
         <div class="dashboard-icon">
@@ -23,7 +24,17 @@
         </div>
         <div>
             <h2>Disciplinas</h2>
-            <p>Gerencie disciplinas, períodos e vagas.</p>
+            <p>Cadastre e gerencie disciplinas do currículo.</p>
+        </div>
+    </a>
+
+    <a href="{% url 'turmas_list' %}" class="dashboard-card">
+        <div class="dashboard-icon">
+            <i class="bi bi-calendar3"></i>
+        </div>
+        <div>
+            <h2>Turmas</h2>
+            <p>Gerencie turmas, períodos letivos e vagas.</p>
         </div>
     </a>
 
@@ -47,4 +58,58 @@
         </div>
     </a>
 </div>
+
+{% else %}
+<div class="dashboard-grid">
+    <a href="{% url 'matriculas_matricular' %}" class="dashboard-card">
+        <div class="dashboard-icon">
+            <i class="bi bi-plus-circle"></i>
+        </div>
+        <div>
+            <h2>Matricular-se</h2>
+            <p>Veja turmas disponíveis e realize sua matrícula.</p>
+        </div>
+    </a>
+
+    <a href="{% url 'minhas_matriculas' %}" class="dashboard-card">
+        <div class="dashboard-icon">
+            <i class="bi bi-card-checklist"></i>
+        </div>
+        <div>
+            <h2>{{ total_matriculas }}</h2>
+            <p>Total de matrículas</p>
+        </div>
+    </a>
+
+    <a href="{% url 'minhas_matriculas' %}" class="dashboard-card">
+        <div class="dashboard-icon" style="color: var(--success, #198754)">
+            <i class="bi bi-check-circle"></i>
+        </div>
+        <div>
+            <h2>{{ confirmadas }}</h2>
+            <p>Confirmadas</p>
+        </div>
+    </a>
+
+    <a href="{% url 'minhas_matriculas' %}" class="dashboard-card">
+        <div class="dashboard-icon" style="color: var(--warning, #ffc107)">
+            <i class="bi bi-hourglass-split"></i>
+        </div>
+        <div>
+            <h2>{{ pendentes }}</h2>
+            <p>Pendentes</p>
+        </div>
+    </a>
+
+    <a href="{% url 'relatorio_meu_historico' %}" class="dashboard-card">
+        <div class="dashboard-icon">
+            <i class="bi bi-clock-history"></i>
+        </div>
+        <div>
+            <h2>Histórico</h2>
+            <p>Veja todas as suas pré-matrículas.</p>
+        </div>
+    </a>
+</div>
+{% endif %}
 {% endblock %}

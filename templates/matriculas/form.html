@@ -3,7 +3,7 @@
 {% block title %}Nova matrícula | Pré-Matrícula{% endblock %}
 
 {% block page_title %}Nova matrícula{% endblock %}
-{% block page_subtitle %}Selecione o aluno e a disciplina para realizar a pré-matrícula{% endblock %}
+{% block page_subtitle %}Selecione o aluno e a turma para realizar a pré-matrícula{% endblock %}
 
 {% block content %}
 <form method="post" class="form-panel">
@@ -23,9 +23,9 @@
         </div>
 
         <div class="col-md-6">
-            <label class="form-label">{{ form.disciplina.label }}</label>
-            {{ form.disciplina }}
-            <div class="form-error">{{ form.disciplina.errors }}</div>
+            <label class="form-label">{{ form.turma.label }}</label>
+            {{ form.turma }}
+            <div class="form-error">{{ form.turma.errors }}</div>
         </div>
     </div>
 
