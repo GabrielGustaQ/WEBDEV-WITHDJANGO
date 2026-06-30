@@ -1,15 +1,23 @@
+/* ============================================================
+   DESIGN TOKENS
+   Paleta centralizada via custom properties. Alterar aqui
+   propaga para todo o layout sem tocar em regras individuais.
+   ============================================================ */
 :root {
-    --bg: #f4f6f9;
-    --surface: #ffffff;
-    --border: #e5e7eb;
-    --text: #111827;
-    --muted: #6b7280;
-    --primary: #1d4ed8;
-    --primary-dark: #1e40af;
-    --sidebar: #111827;
-    --sidebar-light: #1f2937;
+    --bg: #f4f6f9;          /* fundo geral da página */
+    --surface: #ffffff;      /* fundo de cards e painéis */
+    --border: #e5e7eb;       /* cor de bordas e divisores */
+    --text: #111827;         /* texto principal */
+    --muted: #6b7280;        /* texto secundário / legendas */
+    --primary: #1d4ed8;      /* azul primário (botões, ícones) */
+    --primary-dark: #1e40af; /* azul escuro para hover */
+    --sidebar: #111827;      /* fundo da barra lateral */
+    --sidebar-light: #1f2937;/* fundo de item ativo na sidebar */
 }
 
+/* ============================================================
+   RESET GLOBAL
+   ============================================================ */
 * {
     box-sizing: border-box;
 }
@@ -21,18 +29,26 @@ body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+/* ============================================================
+   LAYOUT PRINCIPAL
+   Grid de duas colunas: sidebar fixa (280 px) + área de conteúdo.
+   ============================================================ */
 .app-layout {
     min-height: 100vh;
     display: grid;
     grid-template-columns: 280px 1fr;
 }
 
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
 .sidebar {
     background: var(--sidebar);
     color: white;
     padding: 24px 18px;
 }
 
+/* Cabeçalho da sidebar: ícone da marca + nome do sistema */
 .sidebar-header {
     display: flex;
     gap: 12px;
@@ -40,6 +56,7 @@ body {
     margin-bottom: 32px;
 }
 
+/* Ícone quadrado arredondado reutilizado em sidebar, login e dashboard */
 .brand-icon,
 .login-icon,
 .dashboard-icon,
@@ -60,9 +77,10 @@ body {
 }
 
 .sidebar-header small {
-    color: #9ca3af;
+    color: #9ca3af; /* cinza mais claro que --muted para contrastar com a sidebar escura */
 }
 
+/* Links de navegação da sidebar */
 .sidebar-nav {
     display: flex;
     flex-direction: column;
@@ -85,6 +103,7 @@ body {
     color: white;
 }
 
+/* Título de seção separador dentro da nav (ex: "Relatórios") */
 .sidebar-section {
     color: #9ca3af;
     font-size: 0.75rem;
@@ -93,10 +112,14 @@ body {
     margin: 18px 12px 6px;
 }
 
+/* ============================================================
+   ÁREA DE CONTEÚDO
+   ============================================================ */
 .main-content {
     padding: 28px;
 }
 
+/* Cabeçalho da página: título à esquerda, info do usuário à direita */
 .topbar {
     display: flex;
     justify-content: space-between;
@@ -115,6 +138,7 @@ body {
     color: var(--muted);
 }
 
+/* Bloco com nome do usuário e botão de logout */
 .user-area {
     display: flex;
     align-items: center;
@@ -134,6 +158,10 @@ body {
     color: var(--muted);
 }
 
+/* ============================================================
+   CARD DE CONTEÚDO
+   Container branco com sombra suave usado em todas as páginas.
+   ============================================================ */
 .content-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -142,10 +170,15 @@ body {
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
 }
 
+/* Espaço para as mensagens flash do Django (alert do Bootstrap) */
 .messages {
     margin-bottom: 18px;
 }
 
+/* ============================================================
+   BARRA DE AÇÕES
+   Linha com campo de busca à esquerda e botões à direita.
+   ============================================================ */
 .page-actions {
     display: flex;
     justify-content: space-between;
@@ -164,10 +197,14 @@ body {
     max-width: 360px;
 }
 
+/* ============================================================
+   TABELA
+   ============================================================ */
 .table {
     margin-bottom: 0;
 }
 
+/* Cabeçalho em caixa alta e menor para distinguir do conteúdo */
 .table thead th {
     color: var(--muted);
     font-size: 0.82rem;
@@ -180,16 +217,22 @@ body {
     border-color: var(--border);
 }
 
+/* Estado vazio mostrado quando a listagem não tem registros */
 .empty-state {
     text-align: center;
     color: var(--muted);
     padding: 32px !important;
 }
 
+/* ============================================================
+   FORMULÁRIOS
+   ============================================================ */
+/* Limita largura de formulários de cadastro/edição */
 .form-panel {
     max-width: 920px;
 }
 
+/* Rodapé do formulário: botões de ação separados por borda */
 .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -199,6 +242,7 @@ body {
     border-top: 1px solid var(--border);
 }
 
+/* Mensagem de erro inline de campo de formulário */
 .form-error {
     color: #dc2626;
     font-size: 0.85rem;
@@ -210,6 +254,7 @@ body {
     padding-left: 18px;
 }
 
+/* Caixa informativa azul usada em formulários de matrícula */
 .info-box {
     display: flex;
     gap: 10px;
@@ -221,12 +266,17 @@ body {
     padding: 14px 16px;
 }
 
+/* ============================================================
+   DASHBOARD GRID
+   Grade 2×N de cards de atalho para secretaria / alunos.
+   ============================================================ */
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
 }
 
+/* Card clicável: ícone + título + descrição */
 .dashboard-card {
     display: flex;
     gap: 16px;
@@ -239,6 +289,7 @@ body {
     transition: 0.15s;
 }
 
+/* Efeito de elevação + destaque azul no hover */
 .dashboard-card:hover {
     transform: translateY(-2px);
     border-color: #bfdbfe;
@@ -255,6 +306,10 @@ body {
     color: var(--muted);
 }
 
+/* ============================================================
+   TELA DE LOGIN
+   Página isolada (sem sidebar), cartão centralizado na viewport.
+   ============================================================ */
 .login-page {
     min-height: 100vh;
     display: grid;
@@ -300,6 +355,10 @@ body {
     color: var(--muted);
 }
 
+/* ============================================================
+   TELA DE CONFIRMAÇÃO (exclusão)
+   Cartão centralizado com ícone de alerta e botões de ação.
+   ============================================================ */
 .confirm-box {
     max-width: 600px;
     text-align: center;
@@ -310,6 +369,7 @@ body {
     margin: 0 auto 16px;
 }
 
+/* Variante vermelha usada em confirmações destrutivas */
 .confirm-icon.danger {
     background: #dc2626;
 }
@@ -330,6 +390,10 @@ body {
     margin-top: 24px;
 }
 
+/* ============================================================
+   RESUMO DO ALUNO
+   Grade horizontal com 3 métricas (matrícula, curso, status).
+   ============================================================ */
 .student-summary {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -344,6 +408,7 @@ body {
     border-right: 1px solid var(--border);
 }
 
+/* Remove a borda direita do último item para não duplicar a borda do container */
 .student-summary div:last-child {
     border-right: none;
 }
@@ -354,6 +419,11 @@ body {
     margin-bottom: 4px;
 }
 
+/* ============================================================
+   IMPRESSÃO
+   Remove elementos de navegação e aplica layout simples para
+   relatórios impressos ou exportados em PDF.
+   ============================================================ */
 @media print {
     .sidebar,
     .topbar,
@@ -377,6 +447,11 @@ body {
     }
 }
 
+/* ============================================================
+   RESPONSIVIDADE (≤ 900 px)
+   Em telas estreitas a sidebar passa para cima do conteúdo e
+   os elementos flex viram coluna para caber em uma única faixa.
+   ============================================================ */
 @media (max-width: 900px) {
     .app-layout {
         grid-template-columns: 1fr;
