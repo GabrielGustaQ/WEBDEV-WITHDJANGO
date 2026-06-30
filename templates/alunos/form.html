@@ -1,34 +1,92 @@
+{% comment %}
+=============================================================================
+TEMPLATE: alunos/form.html — Formulário de criação e edição de aluno
+
+HERANÇA DE TEMPLATES no Django:
+  Este arquivo NÃO é uma página completa. Ele "estende" o base.html,
+  que contém o layout geral (sidebar, topbar, scripts, etc.).
+  O mecanismo funciona com blocos: o base.html define "espaços reservados"
+  com {% block nome %}{% endblock %}, e este arquivo preenche cada espaço.
+
+REUSO:
+  O mesmo template serve para CRIAR e EDITAR um aluno.
+  A view passa a variável 'aluno': se for None → criação; se for um objeto → edição.
+  Isso evita duplicar código HTML.
+=============================================================================
+{% endcomment %}
+
+{# {% extends %} declara qual template-pai este arquivo herda. #}
+{# Deve ser sempre a primeira tag do arquivo. #}
 {% extends "base.html" %}
 
+
+{# ── BLOCO: título da aba do navegador ────────────────────────────────────── #}
 {% block title %}
+    {# {% if %} é a estrutura condicional do Django Template Language (DTL). #}
+    {# 'aluno' é a variável enviada pela view via contexto (dicionário render()). #}
+    {# Se 'aluno' existir (edição), exibe "Editar aluno"; senão, "Novo aluno".  #}
     {% if aluno %}Editar aluno{% else %}Novo aluno{% endif %} | Pré-Matrícula
 {% endblock %}
 
+
+{# ── BLOCO: título exibido no cabeçalho da página (topbar) ────────────────── #}
 {% block page_title %}
     {% if aluno %}Editar aluno{% else %}Novo aluno{% endif %}
 {% endblock %}
 
+
+{# ── BLOCO: subtítulo exibido abaixo do título na topbar ──────────────────── #}
 {% block page_subtitle %}
     Preencha os dados cadastrais do aluno
 {% endblock %}
 
+
+{# ── BLOCO: conteúdo principal da página ──────────────────────────────────── #}
 {% block content %}
+
+{# method="post" → envia os dados no corpo da requisição HTTP (não na URL). #}
+{# Usar POST para operações que modificam dados é uma boa prática de segurança. #}
 <form method="post" class="form-panel">
+
+    {# ------------------------------------------------------------------ #}
+    {# {% csrf_token %} — PROTEÇÃO CSRF (Cross-Site Request Forgery)       #}
+    {#                                                                      #}
+    {# O Django gera um token secreto e o inclui como campo oculto no HTML. #}
+    {# Ao receber o POST, o Django confere se o token é válido.             #}
+    {# Isso impede que sites maliciosos enviem formulários em nome do usuário. #}
+    {# OBRIGATÓRIO em todo formulário POST no Django.                      #}
+    {# ------------------------------------------------------------------ #}
     {% csrf_token %}
 
+    {# Erros que não pertencem a nenhum campo específico ficam em non_field_errors. #}
+    {# Ex: validação cruzada entre dois campos. #}
     {% if form.non_field_errors %}
         <div class="alert alert-danger">
             {{ form.non_field_errors }}
         </div>
     {% endif %}
 
+    {# ------------------------------------------------------------------ #}
+    {# RENDERIZAÇÃO DOS CAMPOS DO FORMULÁRIO                               #}
+    {#                                                                     #}
+    {# 'form' é o objeto AlunoForm enviado pela view.                      #}
+    {# Cada campo pode ser acessado individualmente: form.nome, form.email. #}
+    {#                                                                     #}
+    {# {{ form.nome.label }} → exibe o rótulo definido em forms.py (labels) #}
+    {# {{ form.nome }}       → renderiza o <input> HTML com os attrs/widgets #}
+    {# {{ form.nome.errors }} → lista os erros de validação desse campo     #}
+    {# ------------------------------------------------------------------ #}
+
     <div class="row g-3">
+
+        {# col-md-8: ocupa 8/12 colunas do grid Bootstrap em telas médias+ #}
         <div class="col-md-8">
             <label class="form-label">{{ form.nome.label }}</label>
             {{ form.nome }}
             <div class="form-error">{{ form.nome.errors }}</div>
         </div>
 
+        {# col-md-4: ocupa 4/12 colunas — fica ao lado do nome na mesma linha #}
         <div class="col-md-4">
             <label class="form-label">{{ form.matricula.label }}</label>
             {{ form.matricula }}
@@ -53,24 +111,34 @@
             <div class="form-error">{{ form.curso.errors }}</div>
         </div>
 
+        {# d-flex align-items-end → alinha o checkbox verticalmente com os campos ao lado #}
         <div class="col-md-4 d-flex align-items-end">
             <div class="form-check mb-2">
+                {# Campo booleano renderizado como <input type="checkbox"> #}
                 {{ form.ativo }}
                 <label class="form-check-label">
                     {{ form.ativo.label }}
                 </label>
             </div>
         </div>
-    </div>
 
+    </div>{# fim .row #}
+
+    {# ── Botões de ação ──────────────────────────────────────────────────── #}
     <div class="form-actions">
+
+        {# {% url 'alunos_list' %} → gera a URL pelo name definido em urls.py.  #}
+        {# Isso evita escrever o caminho literal "/alunos/", que pode mudar.    #}
         <a href="{% url 'alunos_list' %}" class="btn btn-outline-secondary">
             Cancelar
         </a>
 
+        {# type="submit" envia o formulário via POST para a URL atual. #}
         <button type="submit" class="btn btn-primary">
             Salvar
         </button>
+
     </div>
+
 </form>
-{% endblock %}
+{% endblock %}{# fim block content #}
