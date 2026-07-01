@@ -363,6 +363,5 @@ docker compose run --rm web python manage.py createsuperuser
 - Fláira Hanny Bomfim dos Santos
 - Gabriel Gustavo Santos Queiroz
 - Gabriel Lopes Aguiar
-- Iago Fabricio Meira Pereira
-
+  
 > Universidade Estadual do Sudoeste da Bahia — Bacharelado em Ciência da Computação · 2026
